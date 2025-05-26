@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Sidebar for navigation and orders -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Orders</h2>
+      </div>
+
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link active">Dashboard</a>
+        <a href="logs.html" class="nav-link">Message Logs</a>
+        <a href="broadcast.html" class="nav-link">Broadcast</a>
+        <a href="settings.html" class="nav-link">Settings</a>
+        <a href="templates.html" class="nav-link">Templates</a>
+      </nav>
+
+      <div id="order-list" class="order-list">
+        <!-- Orders load here -->
+      </div>
+      <button id="load-more-orders">Load More Orders</button>
+    </aside>
+
+    <!-- Main content area for chat -->
+    <main class="main-content">
+      <div class="chat-container">
+        
+        <!-- Header with selected customer info -->
+        <header class="chat-header" id="chat-header">
+          <div class="chat-info">
+            <div id="chat-customer-name" class="chat-name">Select a customer</div>
+            <div id="chat-phone-number" class="chat-phone"></div>
+            <button id="clear-chat-btn" class="clear-chat-button">🧹 Clear Chat</button>
+          </div>
+        </header>
+
+        <!-- Message display area -->
+        <section id="chat-messages" class="chat-messages">
+          <!-- Messages injected here -->
+        </section>
+
+        <!-- Message input form -->
+        <form id="message-form" class="message-form">
+          <select id="template-select" class="template-select">
+            <option value="">Use Template</option>
+          </select>
+          <textarea id="message-input" class="message-input" placeholder="Type a message..." rows="1" required></textarea>
+          <input type="file" id="media-input" accept="image/*,video/*,.pdf,.doc,.docx">
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>

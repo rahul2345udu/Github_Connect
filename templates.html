@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates - WhatsApp Business API</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>Orders</h2>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Dashboard</a>
+        <a href="logs.html" class="nav-link">Message Logs</a>
+        <a href="broadcast.html" class="nav-link">Broadcast</a>
+        <a href="settings.html" class="nav-link">Settings</a>
+        <a href="templates.html" class="nav-link active">Templates</a>
+      </div>
+      <div id="order-list" class="order-list">
+        <!-- Template page doesn't need order list, kept for layout consistency -->
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="templates-container">
+        <h2>Message Templates</h2>
+
+        <!-- Add Template Form -->
+        <form id="template-form" class="template-form">
+          <div class="form-group">
+            <label for="template-name">Template Name:</label>
+            <input type="text" id="template-name" placeholder="Enter template name" required>
+          </div>
+          <div class="form-group">
+            <label for="template-text">Template Text:</label>
+            <textarea id="template-text" placeholder="Enter template text" rows="4" required></textarea>
+          </div>
+          <button type="submit">Add Template</button>
+        </form>
+
+        <!-- Template Table -->
+        <h3>Existing Templates</h3>
+        <table class="templates-table">
+          <thead>
+            <tr>
+              <th>Template Name</th>
+              <th>Template Text</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="templates-table-body">
+            <!-- Will be filled dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>

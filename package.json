@@ -1,0 +1,45 @@
+{
+  "name": "whatsapp-mac-app",
+  "version": "1.0.0",
+  "description": "WhatsApp Business API integration for WooCommerce orders on macOS",
+  "author": "Jhuma Dresses",
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "start": "node webhook-server.js",
+    "app": "electron .",
+    "build": "electron-builder --mac",
+    "webhook": "node webhook-server.js"
+  },
+  "build": {
+    "appId": "com.jhuma.whatsappmacapp",
+    "mac": {
+      "target": "dmg"
+    },
+    "files": [
+      "main.js",
+      "src/**/*",
+      "db.js",
+      "api.js",
+      "renderer.js",
+      "webhook-server.js",
+      "whatsapp.db",
+      "manual-customers.js"
+    ],
+    "extraResources": [
+      "whatsapp.db"
+    ]
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "body-parser": "^1.20.2",
+    "electron-store": "^8.2.0",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
+    "electron-reload": "^2.0.0-alpha.1"
+  }
+}

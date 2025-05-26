@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Broadcast - WhatsApp Business API</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>Orders</h2>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Dashboard</a>
+        <a href="logs.html" class="nav-link">Message Logs</a>
+        <a href="broadcast.html" class="nav-link active">Broadcast</a>
+        <a href="settings.html" class="nav-link">Settings</a>
+        <a href="templates.html" class="nav-link">Templates</a>
+      </div>
+      <div id="order-list" class="order-list">
+        <!-- Orders list not needed on this page, but kept for consistency -->
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="broadcast-container">
+        <h2>Broadcast Message</h2>
+        <form id="broadcast-form" class="broadcast-form">
+          <label for="broadcast-message"><strong>Message:</strong></label>
+          <textarea id="broadcast-message" placeholder="Type your broadcast message here..." rows="4" required></textarea>
+          <button type="submit">Send Broadcast</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>
