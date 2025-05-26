@@ -1,8 +1,7 @@
 // ✅ Required modules
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('./src/db');
-// Make sure the path is correct
+const db = require('./src/db'); // Make sure the path is correct
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -34,7 +33,10 @@ app.post('/webhook', async (req, res) => {
     if (body.object === 'whatsapp_business_account') {
       for (const entry of body.entry || []) {
         for (const change of entry.changes || []) {
-          if (change.field === 'messages' && change.value?.messages?.length) {
+          const field = change.field;
+
+          // ✅ Handle normal user messages
+          if (field === 'messages' && change.value?.messages?.length) {
             for (const message of change.value.messages) {
               const phone = message.from;
               const text = message.text?.body || '';
@@ -48,9 +50,23 @@ app.post('/webhook', async (req, res) => {
                 ? 'document'
                 : null;
 
-              const order = await db.getOrderByPhone(phone);
-              const orderId = order ? order.id : 0;
+              // ✅ Ensure order exists
+              let order = await db.getOrderByPhone(phone);
+              if (!order) {
+                const orderData = {
+                  id: null,
+                  phone,
+                  customerName: "Unknown",
+                  orderNumber: "N/A",
+                  date: new Date().toISOString().split('T')[0]
+                };
+                await db.storeOrders([orderData]);
+                console.log(`📦 Dummy order created for ${phone}`);
+                order = await db.getOrderByPhone(phone);
+              }
+              const orderId = order.id;
 
+              // ✅ Save the message
               await db.storeMessage({
                 order_id: orderId,
                 phone,
@@ -65,20 +81,33 @@ app.post('/webhook', async (req, res) => {
               console.log(`✅ Message saved from ${phone}`);
             }
           }
+
+          // ✅ Handle message status updates (optional)
+          if (field === 'message_status') {
+            console.log('📮 Received message_status event');
+          }
+
+          // ✅ Handle message echoes (optional)
+          if (field === 'message_echoes') {
+            console.log('📨 Received message_echoes event');
+          }
         }
       }
     }
 
-    return res.sendStatus(200);
+    return res.sendStatus(200); // Always respond to webhook
   } catch (err) {
     console.error("❌ Webhook error:", err.message);
     return res.sendStatus(500);
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Webhook server running at http://localhost:${PORT}`);
-});
+// ✅ Test route for browser
 app.get("/", (req, res) => {
   res.send("✅ WhatsApp Webhook is Live!");
+});
+
+// ✅ Start the server
+app.listen(PORT, () => {
+  console.log(`🚀 Webhook server running at http://localhost:${PORT}`);
 });
