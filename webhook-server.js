@@ -1,7 +1,7 @@
 // ✅ Required modules
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('./src/db'); // Make sure the path is correct
+const db = require('./src/db'); // Adjust path if needed
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -35,13 +35,12 @@ app.post('/webhook', async (req, res) => {
         for (const change of entry.changes || []) {
           const field = change.field;
 
-          // ✅ Handle normal user messages
+          // ✅ Handle messages
           if (field === 'messages' && change.value?.messages?.length) {
             for (const message of change.value.messages) {
               const phone = message.from;
               const text = message.text?.body || '';
-              const mediaUrl =
-                message.image?.link || message.video?.link || message.document?.link || null;
+              const mediaUrl = message.image?.link || message.video?.link || message.document?.link || null;
               const mediaType = message.image
                 ? 'image'
                 : message.video
@@ -53,18 +52,19 @@ app.post('/webhook', async (req, res) => {
               // ✅ Ensure order exists
               let order = await db.getOrderByPhone(phone);
               if (!order) {
-                const orderData = {
+                const dummyOrder = {
                   id: null,
                   phone,
                   customerName: "Unknown",
                   orderNumber: "N/A",
                   date: new Date().toISOString().split('T')[0]
                 };
-                await db.storeOrders([orderData]);
-                console.log(`📦 Dummy order created for ${phone}`);
+                await db.storeOrders([dummyOrder]);
+                console.log(`📦 Created placeholder order for ${phone}`);
                 order = await db.getOrderByPhone(phone);
               }
-              const orderId = order.id;
+
+              const orderId = order?.id || null;
 
               // ✅ Save the message
               await db.storeMessage({
@@ -82,12 +82,12 @@ app.post('/webhook', async (req, res) => {
             }
           }
 
-          // ✅ Handle message status updates (optional)
+          // ✅ Optional: status events
           if (field === 'message_status') {
             console.log('📮 Received message_status event');
           }
 
-          // ✅ Handle message echoes (optional)
+          // ✅ Optional: echoes
           if (field === 'message_echoes') {
             console.log('📨 Received message_echoes event');
           }
@@ -95,19 +95,20 @@ app.post('/webhook', async (req, res) => {
       }
     }
 
-    return res.sendStatus(200); // Always respond to webhook
+    res.sendStatus(200); // Respond to Meta
   } catch (err) {
-    console.error("❌ Webhook error:", err.message);
-    return res.sendStatus(500);
+    console.error("❌ Webhook error:", err);
+    res.sendStatus(500);
   }
 });
 
-// ✅ Test route for browser
+// ✅ Test route (GET /)
 app.get("/", (req, res) => {
   res.send("✅ WhatsApp Webhook is Live!");
 });
 
-// ✅ Start the server
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`🚀 Webhook server running at http://localhost:${PORT}`);
+  console.log(`🌐 Public URL (Render): https://whatsapp-webhook-q07u.onrender.com/webhook`);
 });
